@@ -2,7 +2,6 @@ import pandas as pd
 
 def RSI(array, n):
     """Relative strength index"""
-    # Approximate; good enough
     gain = pd.Series(array).diff()
     loss = gain.copy()
     gain[gain < 0] = 0
