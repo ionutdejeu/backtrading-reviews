@@ -4,7 +4,7 @@ import pandas as pd
 import backtesting as bt
 from backtesting import _plotting
 
-class SuperTrendIndicator(bt.Indicator):
+class SuperTrendIndicator():
     lines = ('CE', 'long_stop', 'short_stop','signal_line')
     params = (('stake', 100), ('period', 1), ('multip', 3), ("useClose", False),)
     plotinfo = dict(plot=True, subplot=False, plotorder=-100)
@@ -24,7 +24,7 @@ class SuperTrendIndicator(bt.Indicator):
         self.long_stop = self.source - self.atr
         self.short_stop = self.source + self.atr
         # initialise a dummy indicators, to be updated in next
-        self.l.long_stop = bt.indicators.Max(0, 0)
+        self.l.long_stop = self.(0, 0)
         self.l.short_stop = bt.indicators.Max(0, 0)
         self.buy_signal = bt.indicators.Max(0, 0)
         self.sell_signal = bt.indicators.Max(0, 0)
