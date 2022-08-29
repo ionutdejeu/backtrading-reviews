@@ -18,7 +18,7 @@ def CONSTANT(array):
 class SmaCross(Strategy):
     n1 = 10
     n2 = 25
-    ema_length = 34
+    ema_length = 50
     rsi_length = 14
     rsi_sma_length = 14
 
@@ -51,10 +51,10 @@ class SmaCross(Strategy):
                 try:
                     sl_price = curr_ema
                     tp_price1 = price + abs(price-curr_ema)*3
-                    tp_price2 = price * 1.1
+                    tp_price2 = price * 1.05
                     tp_price = tp_price1 if tp_price1 > tp_price2 else tp_price2
 
-                    self.buy(size=1, sl=sl_price,tp=tp_price)
+                    self.buy(size=1, sl=sl_price,tp=tp_price2)
 
 
                 except Exception as e:
