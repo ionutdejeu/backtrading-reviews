@@ -8,7 +8,7 @@ from bokeh.layouts import column
 from bokeh.layouts import widgetbox
 from bokeh.models import ColumnDataSource, Column
 
-from trading_view.sockstats import StockDataFrame
+from sockstats import StockDataFrame
 from visualisation import plot_stock_price, plot_sma, plot_macd, plot_rsi, plot_obv, widget_symbols, widget_show_text
 
 intro_text = "Data is current, courtesy of https://iextrading.com/"
@@ -22,10 +22,10 @@ stock = ColumnDataSource(
 
 
 
-def update(selected=None):
-    symbol = selected
+def update():
+
     # Test getting 6m chart
-    yf_data = yf.download('TSLA', '2021-01-01', '2022-08-28', interval="1h")
+    yf_data = yf.download('TSLA', '2022-03-03', '2022-08-28')
 
     data_temp = pd.DataFrame(yf_data)
     df_temp = data_temp.copy()
@@ -77,35 +77,33 @@ def update(selected=None):
     stock.data = stock.from_df(data)
 
 
+elements = list()
 
-if __name__ == '__main__':
-    elements = list()
+update()
 
-    update("TSLA")
+p_stock = plot_stock_price(stock)
 
-    p_stock = plot_stock_price(stock)
+p_sma = plot_sma(stock)
+p_sma.x_range = p_stock.x_range
 
-    p_sma = plot_sma(stock)
-    p_sma.x_range = p_stock.x_range
+p_macd = plot_macd(stock)
+p_macd.x_range = p_stock.x_range
 
-    p_macd = plot_macd(stock)
-    p_macd.x_range = p_stock.x_range
+p_rsi = plot_rsi(stock)
+p_rsi.x_range = p_stock.x_range
 
-    p_rsi = plot_rsi(stock)
-    p_rsi.x_range = p_stock.x_range
+p_obv = plot_obv(stock)
+p_obv.x_range = p_stock.x_range
 
-    p_obv = plot_obv(stock)
-    p_obv.x_range = p_stock.x_range
+elements.append(Column(widget_show_text(intro_text)))
+elements.append(Column(widget_show_text(warning_text)))
+elements.append(p_stock)
+elements.append(p_sma)
+elements.append(p_macd)
+elements.append(p_rsi)
+elements.append(p_obv)
 
-    elements.append(Column(widget_show_text(intro_text)))
-    elements.append(Column(widget_show_text(warning_text)))
-    elements.append(p_stock)
-    elements.append(p_sma)
-    elements.append(p_macd)
-    elements.append(p_rsi)
-    elements.append(p_obv)
-
-    curdoc().add_root(column(elements))
-    curdoc().title = 'Bokeh stocks data'
+curdoc().add_root(column(elements))
+curdoc().title = 'Bokeh stocks data'
 
 
